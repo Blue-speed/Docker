@@ -1,0 +1,43 @@
+version: "2"
+services:
+  samba:
+    image: bluespeed/samba
+    ports:
+      - '445:445'
+      - '139:139'
+    command: -n -t "EST5EDT" -s "share;/share/mount;yes;no;no" -s "media;/data;yes;no;yes" -i "/root/.smbpasswd"
+    network_mode: "host"
+    volumes:
+      - /root/smbpasswd.container1:/root/.smbpasswd
+      - sambaMedia:/share/mount
+    volumes_from:
+      - plexserver
+    hostname: defiant
+  plexserver:
+    image: linuxserver/plex
+    ports:
+      - '32400:32400'
+      - '34200:34200/udp'
+      - '32469:32469'
+      - '32469:32469/udp'
+      - '5353:5353/udp'
+      - '1900:1900/udp'
+      - '3005:3005'
+      - '8324:8324'
+    volumes:
+      - plexConfig:/config
+      - plexData:/data
+    network_mode: "bridge"
+    hostname: lovel
+    environment:
+      - VERSION=latest
+volumes:
+  sambaMedia:
+    external:
+      name: fileStorage
+  plexConfig:
+    external:
+      name: plexConfig
+  plexData:
+    external:
+      name: mediaStorage
