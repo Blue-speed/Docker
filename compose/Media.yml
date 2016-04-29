@@ -6,7 +6,7 @@ services:
       - '445:445'
       - '139:139'
     command: -n -t "EST5EDT" -s "share;/share/mount;yes;no;no" -s "media;/data;yes;no;yes" -i "/root/.smbpasswd"
-    network_mode: "host"
+    network_mode: "bridge"
     volumes:
       - /root/smbpasswd.container1:/root/.smbpasswd
       - sambaMedia:/share/mount
